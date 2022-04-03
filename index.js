@@ -7,6 +7,9 @@ canvas.height = 576
 c.fillRect(0, 0, canvas.width, canvas.height)
 
 const gravity = 0.7
+//To make value editing easier
+const latVel = 5
+const jumpVel = 15
 
 class Sprite
 {
@@ -91,14 +94,15 @@ function animate()
 
     //Player Movement
     if(keys.a.pressed && player.lastKey == 'a')
-        player.velocity.x = -5
+        player.velocity.x = -latVel
     else if(keys.d.pressed && player.lastKey == 'd')
-        player.velocity.x = 5
+        player.velocity.x = latVel
 
+    //Enemy Movement
     if(keys.ArrowLeft.pressed && enemy.lastKey == 'ArrowLeft')
-        enemy.velocity.x = -5
+        enemy.velocity.x = -latVel
     else if(keys.ArrowRight.pressed && enemy.lastKey == 'ArrowRight')
-        enemy.velocity.x = 5
+        enemy.velocity.x = latVel
 }
 
 animate()
@@ -116,7 +120,9 @@ window.addEventListener('keydown', (event)=>{
             player.lastKey = 'a'
         break
         case 'w':
-            player.velocity.y = -20
+            //To fix Double Jump
+            if(player.position.y + player.height + player.velocity.y >= canvas.height)
+                player.velocity.y = -jumpVel
         break
 
         //Enemy Keys
@@ -129,7 +135,9 @@ window.addEventListener('keydown', (event)=>{
             enemy.lastKey = 'ArrowLeft'
         break 
         case 'ArrowUp':
-            enemy.velocity.y = -20
+            //To fix Double Jump
+            if(enemy.position.y + enemy.height + enemy.velocity.y >= canvas.height)
+                enemy.velocity.y = -jumpVel
         break
     }
     //console.log(event.key)
